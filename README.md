@@ -3,7 +3,7 @@
 
 ---
 
-# Hybrid Modeling Framework for Molecular Toxicity Prediction (Tox21)
+## Introduction
 
 This project develops a **task-aware hybrid machine learning framework** for molecular toxicity prediction using the **Tox21** dataset. The work evaluates classical ML models, graph neural networks (GNNs), task-hardness descriptors, and a new hybrid model that integrates complementary molecular representations.
 
@@ -69,4 +69,3 @@ This project provides:
 - A benchmark of ML and GNN models on Tox21  
 - Insights from task-hardness descriptors  
 - A hybrid modeling strategy that significantly improves toxicity prediction  
-
