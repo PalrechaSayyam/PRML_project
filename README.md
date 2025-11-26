@@ -1,6 +1,8 @@
 ## PRML_project
 # My coursework term project: "A Task-Hardness Driven Hybrid Modeling Framework for Molecular Toxicity Prediction"
 
+---
+
 # Hybrid Modeling Framework for Molecular Toxicity Prediction (Tox21)
 
 This project develops a **task-aware hybrid machine learning framework** for molecular toxicity prediction using the **Tox21** dataset. The work evaluates classical ML models, graph neural networks (GNNs), task-hardness descriptors, and a new hybrid model that integrates complementary molecular representations.
