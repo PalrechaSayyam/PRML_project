@@ -1,0 +1,23 @@
+\begin{table}[t]
+    \centering
+\caption{Percentage ROC-AUC improvement over RF baseline for all models across Tox21 tasks.}
+\label{tab:roc_auc_improvements}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}} lrrr}
+\toprule
+\textbf{Task} & \textbf{RF(Opt.)} & \textbf{XGB(Opt.)} & \textbf{Hybrid\_GNN\_RF} \\
+\midrule
+NR-AR & -2.65 & -0.30 & \textbf{9.29} \\
+NR-AR-LBD & 3.88 & -4.94 & \textbf{10.63} \\
+NR-AhR & 1.14 & -0.24 & \textbf{10.58} \\
+NR-Aromatase & 4.13 & -1.96 & \textbf{15.50} \\
+NR-ER & 20.24 & 16.20 & \textbf{20.38} \\
+NR-ER-LBD & -1.78 & 3.64 & \textbf{22.27} \\
+NR-PPAR-gamma & -2.99 & -16.66 & \textbf{15.91} \\
+SR-ARE & 5.16 & -2.36 & \textbf{30.10} \\
+SR-ATAD5 & 10.84 & 5.55 & \textbf{20.89} \\
+SR-HSE & 8.73 & 8.45 & \textbf{20.39} \\
+SR-MMP & 0.83 & -1.42 & \textbf{15.84} \\
+SR-p53 & 6.17 & 7.92 & \textbf{17.03} \\
+\bottomrule
+\end{tabular*}
+\end{table}

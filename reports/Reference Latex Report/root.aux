@@ -1,0 +1,68 @@
+\relax 
+\citation{tox21_overview}
+\citation{kipf2017gcn}
+\citation{duvenaud2015convnets}
+\citation{gilmer2017mpnn}
+\citation{2025sotdd}
+\citation{rogers2010ecfp}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Overview of the hybrid modeling pipeline combining GNN embeddings and ECFP fingerprints.}}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {II}Literature Survey}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {II-A}Classical ML for Toxicity Prediction}{1}{}\protected@file@percent }
+\citation{wu2018moleculenet}
+\citation{Velickovic2017GraphAN}
+\citation{doi:10.1021/acs.jcim.5c01844}
+\citation{wu2018moleculenet}
+\@writefile{toc}{\contentsline {subsection}{\numberline {II-B}GNNs for Molecular Representation Learning}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {II-C}Hybrid and Multi-View Learning Approaches}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Approach: Benchmarking workflow for ML and GNN models.}}{2}{}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:benchmark_pipeline}{{2}{2}{}{figure.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}{Materials and Methods}}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-A}{Data Description}}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-B}Benchmarking Classical ML Models}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-C}Model Optimization: SMOTE and Optuna}{2}{}\protected@file@percent }
+\citation{doi:10.1021/acs.jcim.4c00160}
+\citation{2025sotdd}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Hybrid GNN-RF architecture used for final modeling.}}{3}{}\protected@file@percent }
+\newlabel{fig:hybrid}{{3}{3}{}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-D}Benchmarking GNN Models}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {III-D.1}GraphConv Model}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {III-D.2}Graph Attention Network (GAT)}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-E}Task Hardness: INT-CHEM and EXT-CHEM}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {III-E.1}INT-CHEM: Intrinsic Task Hardness}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {III-E.2}EXT-CHEM: External Hardness (Task Relatedness)}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-F}Hybrid GNN-RF Model}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {III-F.1}Stage 1: Hybrid Feature Generation}{3}{}\protected@file@percent }
+\citation{doi:10.1021/acs.jcim.4c00160}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {III-F.2}Stage 2: Task-Specific Random Forest Classifiers}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {III-G}Model Evaluation and Interpretation}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Results and Discussion}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Model comparisons: (a) ROC-AUC and (b) PR-AUC between RF and SVM; (c) ROC-AUC and (d) PR-AUC between GraphConv and GAT across Tox21 tasks.}}{4}{}\protected@file@percent }
+\newlabel{fig:rf_svm_gnn_roc_pr}{{4}{4}{}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Optimized models comparison with baseline: (a) ROC-AUC and (b) PR-AUC performance across Tox21 tasks.}}{4}{}\protected@file@percent }
+\newlabel{fig:all_model_comparison_roc_pr}{{5}{4}{}{figure.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Task hardness landscape using INT-CHEM and EXT-CHEM descriptors, showing two distinct groups of tasks.}}{5}{}\protected@file@percent }
+\newlabel{fig:task_hardness_landscape}{{6}{5}{}{figure.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Conclusion}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Hybrid model comparison across all Tox21 tasks using (a) ROC-AUC and (b) PR-AUC.}}{5}{}\protected@file@percent }
+\newlabel{fig:hybrid_comparison_roc_pr}{{7}{5}{}{figure.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Average ROC-AUC and PR-AUC scores across Tox21 tasks scores for all models.}}{5}{}\protected@file@percent }
+\newlabel{tab:tox21_summary_avg}{{I}{5}{}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Percentage PR-AUC improvement over RF baseline for all models across Tox21 tasks.}}{5}{}\protected@file@percent }
+\newlabel{tab:pr_auc_improvements}{{II}{5}{}{table.2}{}}
+\citation{*}
+\bibdata{refs}
+\bibcite{tox21_overview}{1}
+\bibcite{kipf2017gcn}{2}
+\bibcite{duvenaud2015convnets}{3}
+\bibcite{gilmer2017mpnn}{4}
+\bibcite{2025sotdd}{5}
+\bibcite{rogers2010ecfp}{6}
+\bibcite{wu2018moleculenet}{7}
+\bibcite{Velickovic2017GraphAN}{8}
+\bibcite{doi:10.1021/acs.jcim.5c01844}{9}
+\bibcite{doi:10.1021/acs.jcim.4c00160}{10}
+\bibstyle{ieeetr}
+\@writefile{toc}{\contentsline {section}{References}{6}{}\protected@file@percent }
+\gdef \@abspage@last{6}

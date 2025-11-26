@@ -1,0 +1,97 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+\IEEEoverridecommandlockouts%                             %https://www.overleaf.com/2156968253fhhpgmhwnfrt % This command is only needed if 
+                                                          % you want to use the \thanks command
+
+\overrideIEEEmargins%                                      % Needed to meet printer requirements.
+
+%In case you encounter the following error:
+%Error 1010 The PDF file may be corrupt (unable to open PDF file) OR
+%Error 1000 An error occurred while parsing a contents stream. Unable to analyze the PDF file.
+%This is a known problem with pdfLaTeX conversion filter. The file cannot be opened with acrobat reader
+%Please use one of the alternatives below to circumvent this error by uncommenting one or the other
+%\pdfobjcompresslevel=0
+%\pdfminorversion=4
+
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphics} % for pdf, bitmapped graphics files
+\usepackage{epsfig} % for postscript graphics files
+\usepackage{mathptmx} % assumes new font selection scheme installed
+\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{multirow} 
+\usepackage{booktabs}
+\usepackage{comment} % for comment command
+\usepackage{soul, color} % for hl command
+% \usepackage{wrapfig}
+\usepackage{placeins} 
+% \usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes, arrows.meta, calc}
+
+\title{\LARGE \bf
+     A Task-Hardness Driven Hybrid Modeling Framework for Molecular Toxicity Prediction
+} 
+\author{Sayyam Palrecha$^{1}$  
+% <-this % stops a space
+%\thanks{*This work was not supported by any organization}% <-this % stops a space
+%\thanks{The work was partly supported by Grant BT/PR16582/BID/7/667/2016, Department of Biotechnology (DBT), and SRM by Visvesvaraya PhD Scheme for Electronics and Information Technology, Ministry of Electronics and Information Technology (MeitY), Government of India.}
+% \thanks{$^{1}$Department of Artificial Intelligence, Indian Institute of Technology Hyderabad, India.}%
+% \thanks{$^{2}$Department of  Radiodiagnosis, Mahatma Gandhi Medical College and Hospital (MGMCH), Jaipur, India.}%
+% \thanks{$^{3}$Medway NHS Foundation Trust, United Kingdom.}%
+% \thanks{$^{4}$East Kent Hospitals University NHS Foundation Trust, United Kingdom.}%.}%
+\thanks{$^{1}$ Undergraduate Student, Electrical Engineering, IIT Hyderabad {\tt\small ee22btech11047@iith.ac.in}}%
+% \thanks{$^{2}$Department of Electrical Engineering, Indian Institute of Technology Hyderabad, India.}%
+}
+
+
+%\author{ <-this % stops a space
+% \thanks{}% <-this % stops a space
+% \thanks{$^{1}$ Undergraduate Student, Electrical Engineering, IIT Hyderabad {\tt\small ee22btech11047@iith.ac.in}}%
+% \thanks{$^{2}$Undergraduate Student, Electrical Engineering, IIT Hyderabad
+%         {\tt\small ee15btech11006@iith.ac.in}}%
+% \thanks{$^{3}$Associate Professor, Electrical Engineering, IIT Hyderabad
+%         {\tt\small ee15btech11006@iith.ac.in}}%
+%}
+
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\graphicspath{{}{images/}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{abs}
+
+\section{Introduction}
+\input{intro}
+
+% \section{Related Works}
+\input{survey} 
+
+%\section{Materials and Methods}
+\input{mat.tex}
+
+
+
+%\section{Results and Discussion}
+\input{res}
+
+\nocite{*}
+\bibliography{refs}
+\bibliographystyle{ieeetr}
+\end{document}

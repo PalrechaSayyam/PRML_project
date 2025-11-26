@@ -1,0 +1,29 @@
+\section{Literature Survey}
+Molecular toxicity prediction has been widely explored using both traditional cheminformatics methods and modern deep learning architectures. Prior work broadly falls into three categories: classical machine learning, graph neural networks, and hybrid or multi-view approaches that integrate complementary molecular representations.
+
+\subsection{Classical ML for Toxicity Prediction}
+Early computational toxicology methods relied on engineered chemical descriptors such as Extended Connectivity Fingerprints (ECFP) and other fragment-based fingerprints\cite{rogers2010ecfp}. Models like Random Forests (RF), Support Vector Machines (SVM), and Gradient Boosted Decision Trees (XGBoost) achieved strong performance in many QSAR tasks, including those in the Tox21 challenge.
+These models capture local substructures effectively, but their reliance on handcrafted representations limits their ability to encode higher-order structural and electronic interactions. Moreover, classical models often struggle on datasets with severe class imbalance, assay noise, and nonlinear structure-toxicity relationships, all of which are characteristic of Tox21.
+
+\subsection{GNNs for Molecular Representation Learning}
+Graph Neural Networks (GNNs) represent a major shift toward learning molecular features directly from atom-bond graphs. The seminal MoleculeNet benchmark suite by Wu et al.~\cite{wu2018moleculenet} evaluated multiple graph architectures including Graph Convolutional Networks (GraphConv) and Message Passing Neural Networks (MPNNs) across molecular datasets such as Tox21, HIV, and QM9.
+The attention-based GNN architecture, Graph Attention Networks (GAT), introduced by Veličković et al.~\cite{Velickovic2017GraphAN}, further demonstrated the value of adaptive edge-weight learning for capturing chemically relevant interactions.
+The \textbf{MoleculeNet paper strongly influenced the first stage of my work}. After reviewing their benchmark design and model comparisons, a similar methodological philosophy was adopted:
+\begin{itemize}
+    \item evaluate classical ML models,
+    \item evaluate GNN models, and
+    \item apply optimization strategies (hyperparameter tuning, data balancing, early stopping)
+\end{itemize}
+to construct a unified benchmark for the Tox21 dataset.
+Although GNNs often outperform classical ML models on complex toxicity mechanisms, their performance varies significantly across tasks. This motivates deeper investigation into task difficulty, task similarity, and the potential for \textbf{knowledge transfer across tasks}.
+
+\subsection{Hybrid and Multi-View Learning Approaches}
+Recent research increasingly focuses on hybrid, multi-representation models that integrate diverse molecular views including fingerprints, graph embeddings, SMILES/SELFIES embeddings, and transformer-based chemical language models. Such models leverage complementary strengths of different feature spaces to achieve stronger predictive performance.
+Parker et al.~\cite{doi:10.1021/acs.jcim.5c01844} demonstrated that combining graph-based molecular featurization with heterogeneous ensemble models substantially improves property prediction accuracy. Their findings underscore the potential of integrating learned graph representations with classical ML methods.
+Mixture-of-Experts (MoE) architectures and multimodal fusion networks have shown that combining handcrafted descriptors with learned embeddings can outperform single-view models, particularly for toxicity endpoints with heterogeneous mechanisms. Hybrid models are especially powerful when:
+\begin{itemize}
+    \item GNNs capture global graph-level structure,
+    \item Fingerprints capture local substructure motifs, and
+    \item Chemical language models (e.g., ChemBERTa) capture sequence-based semantics.
+\end{itemize}
+These insights motivate the hybrid approach developed in this work, where GNN-derived embeddings are fused with ECFP fingerprints and used as input to a Random Forest classifier. This strategy aligns with prior findings that multi-view integration can resolve limitations of standalone ML models and GNNs especially for difficult toxicity tasks with complex decision boundaries.

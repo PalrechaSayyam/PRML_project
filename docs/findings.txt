@@ -1,0 +1,129 @@
+SOURCE: MoleculeNet: a benchmark for molecular machine learning
+findings:
+Data for molecule-based machine learning tasks are highly heterogeneous and expensive to gather. 
+As a result, molecular datasets are usually much smaller than those available for other machine learning tasks. Furthermore, the breadth of chemical research means our interests with respect to
+a molecule may range from quantum characteristics to measured impacts on the human body. Molecular machine learning
+methods have to be capable of learning to predict this very broad range of properties.
+Random splitting, common in machine learning, is often not correct for chemical data.33 MoleculeNet contributes a library of splitting
+mechanisms to DeepChem and evaluates all algorithms with multiple choices of data split.
+The “Toxicology in the 21st Century”
+(Tox21) initiative created a public database measuring toxicity of compounds, which has been used in the 2014
+Tox21 Data Challenge.53 This dataset contains qualitative toxicity measurements for 8014 compounds on 12 diﬀerent
+targets, including nuclear receptors and stress response pathways.
+Following suggestions from the community,64 regression datasets are evaluated by mean absolute error (MAE) and root-mean-square error (RMSE), clas-
+sication datasets are evaluated by area under curve (AUC) of the receiver operating characteristic (ROC) curve65 and the precision recall curve (PRC).
+Extended-Connectivity Fingerprints (ECFP) are widely-used molecular characterizations in chemical informatics.21 During the featurization process, a molecule is
+decomposed into submodules originated from heavy atoms, each assigned with a unique identier. These segments and identifiers are extended through bonds to generate larger
+substructures and corresponding identifiers.
+Support vector machine
+(SVM) is one of the most famous and widely-used machine learning method.78 As in classication task, it denes a decision
+plane which separates data points of diﬀerent class with maximized margin. To further increase performance, we incorporates regularization and a radial basis function kernel(KernelSVM)
+Random forests. Random forests (RF) are ensemble prediction methods.72 A random forest consists of many individual decision trees, each of which is trained on a subsampled
+version of the original dataset. The results for individual trees are averaged to provide output predictions for the full forest.
+Random forests can be used for both classication and regression tasks
+Gradient boosting is another ensemble method consisting of individual decision trees.73 In contrast to random forests, it builds relatively simple trees which are sequentially incorporated to the ensemble. 
+In each step, a new tree is generated in a greedy manner to minimize loss function. A sequence of such “weak” trees are combined together into an additive model.
+Graph convolutional
+models (GC) extend the decomposition principles of circular ngerprints. Both methods gradually merge information for distant atoms by extending radially through bonds. 
+This information is used to generate identiers for all substructures. However, instead of applying xed hash functions, 
+graph convolutional models allow for adaptive learning by using diﬀerentiable network layers. This creates a learnable process
+capable of extracting useful representations of molecules suited to the task at hand.
+On a higher level, graph convolutional models treat molecules as undirected graphs, and apply the same learnable
+function to every node (atom) and its neighbors (bonded atoms) in the graph. This structure recapitulates convolution layers in visual recognition deep networks.
+All graph models use their corresponding featurizations. Non-graph models use ECFP featurizations by default
+Most models have train scores higher than validation/test scores, indicating that overtting is a general issue. Singletask logistic regression exhibits the
+largest gaps between train scores and validation/test scores, while models incorporating multitask structure generally show
+less overt, suggesting that multitask training has a regularizing eﬀect.
+Multitask algorithms combine diﬀerent tasks, resulting in a larger pool of data for model training. In particular, multitask
+training can, to some extent, compensate for the limited data amount available for each individual task.
+Graph convolutional models and weave models, each based on an adaptive method of featurization,22,23 show strong validation/test results on larger datasets, along with less overt.
+Similar results are reported in previous graph-based algorithms, showing that learnable featurizations can provide a large boost compared with conventional featurizations.
+For smaller singletask datasets (less than 3000 samples), diﬀerences between models are less clear. Kernel SVM and ensemble tree methods (gradient boosting and random forests)
+are more robust under data scarcity, while they generally need longer running time (see Table S1†). Worse performances of
+graph-based models are within expectation as complex models generally require more training data.
+We trained multiple models on Tox21 with training sets of different size (10% to 90% of the whole dataset) displayed mean out-of-sample performances (and standard deviations) of ve independent runs. 
+A clear increase on performance is observed for each model, and graph-based models (graph convolutional model and weave model) always
+stay on top of the lines. By drawing a horizontal line at around 0.80, we can see graph-based models achieve the similar level of
+accuracy with multitask networks by using only one-third of the training samples (30% versus 90%).
+Broadly, our results show that graph-based models (graph convolutional models, weave models and DTNN) outperform other methods by comfortable margins on most datasets, 
+revealing a clear advantage of learnable featurizations. However, this eﬀect has some caveats: graph-based methods are not robust enough on complex tasks under data scarcity; 
+on heavily imbalanced classication datasets, conventional methods such as kernel SVM outperform learnable featurizations with respect to recall of positives.
+
+SOURCE: A systematic study of key elements underlying molecular property prediction
+findings:
+One of the most widely used circular fingerprint is the extended-connectivity fingerprints (ECFP) based on the Morgan
+algorithm, which was originally proposed to address the molecular isomorphism issue, specifically to determine if two molecules with different atom numberings are the same.
+ECFP has been the de facto standard circular fingerprint and is still valuable in drug discovery28. The vector size of ECFP is usually set as 1024 or 2048. The radius size of ECFP can either
+be 2 or 3, termed ECFP4 or ECFP6, which are common variants of ECFP in the literature.
+Various model architectures have been proposed for molecular property prediction, such as RNNs, GNNs, and transformers. On the other hand,
+GNNs are well-suited for molecular graphs. Different variants have been applied, such as graph convolutional networks (GCN), graph
+attention networks (GAT), message passing neural networks (MPNN), directed MPNN (D-MPNN), and graph isomorphism networks (GIN).
+To address the scarcity of annotated data in drug discovery, self-supervised learning has recently been proposed for
+pretraining on large-scale unlabeled molecules corpus before downstream finetuning - two pretrained models: MolBERT11 and GROVER13, which use SMILES strings and molecular graphs as input.
+Previous studies have shown that RF, XGBoost, and SVM serve as strong baselines for deep-learning models in molecular
+property prediction43. Consequently, we selected them as baselines in our study.
+Following the original BERT model, MolBERT uses the BERTBase architecture with an output embedding size of 768, 12 BERT
+encoder layers, 12 attention heads, and a hidden size of 3072, resulting in about 85M parameters. During finetuning, the pretrained model,
+with its backbone weights frozen, is combined with one linear layer, totaling 769 parameters to be optimized.
+GNNs, therefore, have been widely applied in molecular representations learning.
+Among different variants of GNNs, GCN is a basic type that encodes themolecular structure into a graph and then applies convolutional operations to extract features.
+GIN further improves GCN with a permutation-invariant aggregation operation, which ensures the learned embeddings invariant to the
+node orderings. This enables GIN to handle graph isomorphism, where two graphs have identical structures but different node labels.
+To improve prediction performance in low-data regimes, pretraining has been proposed for GNNs with two common tasks:12: self supervised
+node-level atom type prediction and supervised graph levelmolecular label prediction. However, supervised pretraining may
+cause “negative transfer”, where downstream performance can be deteriorated.
+Recently, Rong et al. 13 proposed GROVER with delicately designed, self-supervised pretraining tasks at the node-, edge- and
+graph-level. GROVER is pretrained on about 10M unlabeled molecules and achieves state-of-the-art performance on 11 benchmark datasets
+The first major question that our study aims to answer is: how useful are the learned representations for molecular property prediction? While deep neural
+networks have been reported to outperform traditional machine learning models, such as RF and SVMon ECFP6 in a large-scale activity prediction study, 
+recent analyses by Robinson et al .17 revealed that SVM remains competitive with neural network models. Therefore, to thoroughly investigate whether 
+learned representations can surpass fixed representations, we carefully selected several representative models for molecular property prediction following 
+an extensive literature review. Our evaluation includes traditional machine learning models (RF, SVM, and XGBoost), regular neural networkmodels (RNN, GCN, and GIN), 
+and pretrained neural network models (MolBERT, GROVER, and GROVER_RDKit).
+In addition to the choice of evaluationmetrics, another crucial but often missing part in previous studies is the statistical test, despite that the benchmark datasets are small-sized
+In representation learning for molecular property prediction, the ultimate goal is to build models that can generalize from known molecules to unseen
+ones. To mimic chronological split in the real-world setting, MoleculeNet recommends scaffold split58 as a proxy which ensures that
+molecules in test sets are equipped with unseen scaffolds during training, posing a more challenging prediction task.
+To check if learned representations outperformfixed representations, we compared between RF and pretrained models, specifically Mol-
+BERT, GROVER, and GROVER_RDKit, which have been reported to achieve state-of-the-art performance. Notably, the results of RF on
+RDKit2D descriptors are used for this comparison since these descriptors are also utilized in GROVER_RDKit.
+For RDKit2D descriptors, we also compared among traditional machine learning models (Figs. 3d, 5d) and found that under scaffold
+split, RF achieves the best performance in BACE, BBBP, HIV, Lipop and all opioids-related datasets, whereas XGBoost performs best in ESOL
+and FreeSolv (p < 0.05). SVM exhibits the worst performance in all opioids-related datasets in the regression setting andmost benchmark
+datasets. For SMILES strings,MolBERT outperforms RNN in BACE, HIV, Lipop, and all opioids-related datasets except MDR1. For molecular
+graphs, we found that GCN and GIN achieve similar performance in BBBP, HIV, ESOL, FreeSolv, MDR1, CYP3A4, DOR and KOR. In BACE,
+Lipop, and MOR, GIN outperforms GCN whereas in CYP2A6, GCN surpasses GIN (p < 0.05). GROVER outperforms GCN and GIN in BBBP,
+ESOL, and FreeSolv. However, in HIV, Lipop, and most opioids-related datasets, GROVER shows worse performance. On the contrary to
+MolBERT, we speculate that GROVER may exhibit higher prediction power in smaller datasets. Given the superior performance of RF in most datasets.
+Based on our extensive experimentation and rigorous comparison, we observed that traditional machine learningmodels on fixed molecular
+representations still excel in molecular property prediction, outperforming
+recent representation learning models in most datasets. This raises a natural question: why do representation learning models fail?
+Representation learning models, particularly GROVER, exhibit high variability in all metrics. Moreover, metric variability can be further correlated with meanmetric values
+The inherent variability underlying representation learning models can be another manifestation of the prediction performance, underscoring the
+importance of reporting metric variability along with the means. Notably, imbalanced datasets can contribute to high variability and subsequently lead to low performance.
+we observed that molecular descriptors can be particularly predictive in certain datasets. For instance, RF on the PhysChem descriptors
+can achieve comparable performance with the best-performing RDKit2D descriptors in ESOL (Fig. 3e). In contrast, biological activity
+is more complicated and cannot be well tackled with the descriptors alone; structural fingerprints are more useful in these cases.
+correlation coefficients in most datasets fall within the range [−0.5, 0.5], suggesting weak correlation between binding activity and the
+descriptors. This could explain why PhysChem descriptors show limited performance in activity prediction. Notably, MolWt, NumAtoms, NumHAcceptors, and NumRotatableBonds
+can have a moderate correlation with activity in certain datasets, with correlation coefficient (>0.5) whereas, surprisingly, NumHDonors is weakly correlated with activity.
+In summary, for the descriptors prediction, the performance of RF, SVM, and XGBoost improves as the data size increases.
+We speculate that SVM, despite its inferior performance when the dataset size is small, it can achieve superior performance
+in large datasets. For representation learning models, regular neural network models have limited performance when the dataset size is below 1K, whereas pretrained graph-based
+model GROVER shows superior performance.
+Surprisingly, the pretrained sequence-based model MolBERT shows quite limited performance, with RMSE over 200 when the dataset size is less than 10K.
+Pretraining tasks, such as masked language modeling in MolBERT and contextual property prediction in GROVER, lean towards the generative type. Recently, the
+contrastive type of self-supervised pretraining has also been applied in molecular property prediction. For instance,MolCLR14 proposes three
+augmentation strategies, namely, atom masking, bond deletion and subgraph removal, on molecular graphs to pretrain GCN and GIN, respectively.
+
+findings:
+Multi-task GNN performance was not predicted by chemical similarity (EXT_CHEM) alone.
+Tasks with low EXT_CHEM still performed poorly if they had high INT_CHEM, showing that internal task difficulty dominates external similarity.
+Conversely, tasks with high EXT_CHEM performed well when INT_CHEM was low, showing that strong internal signal can overcome chemical isolation.
+In the Tox21 dataset, INT_CHEM has substantially higher predictive value than EXT_CHEM.
+This means internal biological/chemical difficulty of the task determines performance more strongly than similarity to other tasks.
+Consequently, multi-task learning benefits only those tasks that are internally learnable.
+
+We discovered that tasks where the GNN should perform best (high internal complexity, low external distance), the GNN unexpectedly failed.
+To test whether the GNN embeddings were incomplete, we fused GNN embeddings with traditional ECFP fingerprints and trained a hybrid RandomForest.
+The hybrid succeeded exactly on the problematic tasks, showing that explicit fragment-level signals missing in GNN embeddings are necessary for these toxicity mechanisms

@@ -1,0 +1,24 @@
+
+Baseline Model Comparison Summary
+---------------------------------
+Total tasks analyzed: 12
+
+RF performed better (ROC-AUC and/or PR-AUC) on: NR-AR-LBD, NR-Aromatase, NR-AR, NR-AhR, NR-PPAR-gamma, NR-ER-LBD, SR-ARE, SR-HSE, SR-p53, SR-MMP
+SVM performed better (ROC-AUC and/or PR-AUC) on: NR-AR-LBD, NR-PPAR-gamma, NR-ER-LBD, NR-ER, SR-ATAD5, SR-ARE
+
+Observations:
+- Tasks where RF performs better likely have non-linear relationships or substructure-level signal
+  that RF's ensemble of trees can capture, even with some noise or imbalance.
+- Tasks where SVM performs better are probably more linearly separable in the ECFP fingerprint space,
+  suggesting that the active vs inactive molecules are well separated by a simple hyperplane.
+- SVM may also dominate when data imbalance is less severe, since it does not inherently rebalance samples.
+- Conversely, RF tends to perform more robustly when the data is noisy or mildly imbalanced, due to bagging and random feature selection.
+
+Interpretation:
+These performance splits imply that some Tox21 endpoints (e.g., receptor-based assays with consistent
+chemical scaffolds) are easier to classify linearly, while others (e.g., stress-response assays) need
+nonlinear models like RF that can capture higher-order feature interactions.
+
+Next Step:
+This justifies tuning RF/XGB (to improve imbalance handling) and later comparing to GNN models
+to see if structure-based learning helps in tasks that defeated both SVM and RF.

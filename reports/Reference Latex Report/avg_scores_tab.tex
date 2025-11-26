@@ -1,0 +1,18 @@
+\begin{table}[t!]
+    \centering
+\caption{Average ROC-AUC and PR-AUC scores across Tox21 tasks scores for all models.}
+\label{tab:tox21_summary_avg}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}} lrr}
+\toprule
+    \textbf{Model} & \textbf{PR\_AUC} & \textbf{ROC\_AUC} \\
+    \midrule
+    RF & 0.232358 & 0.689495 \\
+    SVM & 0.201932 & 0.676948 \\
+    RF(Optimized) & 0.249211 & 0.717878 \\
+    XGB(Optimized) & 0.238184 & 0.694999 \\
+    GraphConv & 0.231218 & 0.690771 \\ 
+    GAT & 0.188265 & 0.707952 \\
+    Hybrid\_GNN\_RF & \textbf{0.453431} & \textbf{0.806352} \\
+\bottomrule
+\end{tabular*}
+\end{table}

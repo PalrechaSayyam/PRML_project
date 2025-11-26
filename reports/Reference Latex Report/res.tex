@@ -1,0 +1,144 @@
+
+
+
+% \begin{figure}[t!]
+%     \centering
+%   %\begin{subfigure}{7cm}
+%    % \centering
+%     \includegraphics[width=\columnwidth]{images/Quadratic-Regression_1.png}
+%     %\\
+%      %\end{subfigure}
+% \caption{Scatter plots of ALLR (computed by UNet++ and SegCaps) versus CT severity score, and corresponding quadratic regression curve.}
+% \label{fig:RelationshipGraph}
+% \end{figure}
+
+% \begin{figure}[t!]
+%     \centering
+%   %\begin{subfigure}{7cm}
+%   %  \centering
+%     \includegraphics[width=1.0\columnwidth]{images/ROC-Overlay-fpr-tpr.png}
+%    % \\
+% % \end{subfigure}
+% \caption{Median ROC curves obtained by UNet++ (AUC: 0.912) and SegCaps (AUC: 0.904), as well as the convex hull of the maximum (AUC: 0.921).}
+% \label{fig:ROC_CUrve}
+% \end{figure}
+
+\section{Results and Discussion}
+This section presents the benchmarking performance of classical machine learning models, graph neural networks, and the proposed hybrid RF-GNN model. Results are reported using ROC-AUC and PR-AUC across all 12 Tox21 tasks.
+
+Classical ML models were benchmarked first using ECFP fingerprints. Fig.~\ref{fig:rf_svm_gnn_roc_pr}(a,b) compares Random Forest (RF) and Support Vector Machine (SVM) performance across all tasks. RF consistently outperformed SVM, achieving higher PR-AUC on 9 out of 12 tasks, confirming that tree-based methods are well-suited for high-dimensional sparse fingerprints.
+To establish a strong baseline prior to introducing graph-based and hybrid architectures, systematic optimization was performed of classical machine learning models, focusing on Random Forest (RF) and Extreme Gradient Boosting (XGBoost). The goal was to evaluate how much performance gain can be achieved purely through better configuration of these traditional methods compared to their baseline counterparts.
+optimization of RF and XGBoost was done using a two-stage procedure:
+\begin{enumerate}
+    \item \textbf{Data-level balancing via SMOTE}: Synthetic oversampling was used to mitigate class imbalance in each task, improving the representation of minority classes and stabilizing model training.
+    \item \textbf{Hyperparameter tuning via Optuna}: A search space covering tree depth, number of estimators, learning rate (for XGBoost), and regularization terms was explored using a PR-AUC objective to reflect performance under class imbalance.
+\end{enumerate}
+This approach allowed each optimized model to adapt more effectively to the characteristics of Tox21 tasks, with particular improvements observed for tasks having high INT-CHEM scores.
+Optimized RF and XGBoost models outperform their baseline versions across nearly all Tox21 tasks. However, it was observed that even well-tuned classical models struggled on tasks with complex structural dependencies, where graph-based or hybrid approaches perform markedly better. These findings align with our task hardness analysis:
+\begin{itemize}
+    \item Tasks with \textbf{high INT-CHEM} often require more expressive molecular representations than fingerprints alone.
+    \item Tasks with \textbf{low EXT-CHEM} benefit less from transfer-style inductive biases found in GNNs.
+\end{itemize}
+
+\begin{figure}[!t]
+    \centering
+\begin{tabular}{cc}
+    \includegraphics[width=0.48\columnwidth]{../../results/plots/roc_auc.png}
+    &
+    \includegraphics[width=0.48\columnwidth]{../../results/plots/pr_auc.png}
+    \\
+    (a) & (b)
+    \\[6pt]
+    \includegraphics[width=0.48\columnwidth]{../../results/plots/gnn_per_task_rocauc.png}
+    &
+    \includegraphics[width=0.48\columnwidth]{../../results/plots/gnn_per_task_prauc.png}
+    \\
+    (c) & (d)
+\end{tabular}
+\caption{Model comparisons: (a) ROC-AUC and (b) PR-AUC between RF and SVM; (c) ROC-AUC and (d) PR-AUC between GraphConv and GAT across Tox21 tasks.}
+\label{fig:rf_svm_gnn_roc_pr}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\begin{tabular}{cc}
+    \includegraphics[width=0.48\columnwidth]{../../results/plots/roc_auc_across_tasks.png}
+    &
+    \includegraphics[width=0.48\columnwidth]{../../results/plots/pr_auc_across_tasks.png}
+    \\
+    (a) & (b)
+\end{tabular}
+\caption{Optimized models comparison with baseline: (a) ROC-AUC and (b) PR-AUC performance across Tox21 tasks.}
+\label{fig:all_model_comparison_roc_pr}
+\end{figure}
+
+Next, the GraphConv neural network trained using DeepChem was evaluated. Per-task ROC-AUC and PR-AUC are shown in Fig.~\ref{fig:rf_svm_gnn_roc_pr}(c,d). Although GNNs performed well on certain structure-driven tasks such as NR-AR, NR-AhR, and SR-ARE, they struggled on tasks with high intrinsic hardness (INT-CHEM), consistent with previous findings in molecular property prediction.
+To compare all models jointly, results were aggregated for baseline RF, optimized RF, optimized XGBoost, GraphConv, and GAT (Fig.~\ref{fig:all_model_comparison_roc_pr}). GNNs performed competitively with optimized tree-based models but did not consistently surpass them. This reinforced the hypothesis that different models capture complementary chemical information.
+\textbf{To delve deeper into the nature of these observed performance differences, the analysis leverages established task-hardness descriptors, specifically INT-CHEM and EXT-CHEM.} These metrics provide a crucial lens through which to interpret model behavior, revealing underlying characteristics of the toxicity tasks themselves~\cite{doi:10.1021/acs.jcim.4c00160}.
+Two clear groups of toxicity tasks are observed(also shown in Fig. 6):
+% Using INT-CHEM and EXT-CHEM descriptors~\cite{doi:10.1021/acs.jcim.4c00160}, I observed two clear groups of toxicity tasks (also shown in Fig.~\ref{fig:task_hardness_landscape}):
+\begin{itemize}
+    \item \textbf{High INT-CHEM, Low EXT-CHEM:} intrinsically difficult tasks but does have similar tasks nearby in chemical space (externally easy) where multi-task GNNs should theoretically excel.
+    \item \textbf{Low INT-CHEM, High EXT-CHEM:} intrinsically easier and externally difficult tasks well-handled by single-task RF models.
+\end{itemize}
+Surprisingly, GraphConv did not outperform RF on the high INT-CHEM tasks, suggesting that the GNN learned incomplete structural representations. This insight motivated the hybrid model.
+The hybrid model concatenates GNN embeddings with ECFP fingerprints and trains a single Random Forest on the joint representation. Figures~\ref{fig:hybrid_comparison_roc_pr}(a,b) show that the hybrid model significantly improves PR-AUC across nearly all tasks, particularly those previously identified as high-hardness.
+% Table~\ref{tab:roc_auc_improvements} and~\ref{tab:pr_auc_improvements} summarizes the gains of optimized and hybrid models relative to the baseline RF. The hybrid model yields the largest improvement, confirming that ECFP fingerprints and GNN embeddings provide complementary chemical insight.
+% Table~\ref{tab:tox21_summary_avg} and~\ref{tab:pr_auc_improvements} summarizes the gains of optimized and hybrid models relative to the baseline RF. The hybrid model yields the largest improvement, confirming that ECFP fingerprints and GNN embeddings provide complementary chemical insight.
+Tables~\ref{tab:tox21_summary_avg} and~\ref{tab:pr_auc_improvements} together highlight the overall performance gains, showing that while optimized classical models provide modest improvements, the proposed Hybrid\_GNN\_RF model consistently delivers the largest increase in predictive accuracy across Tox21 tasks.
+
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\columnwidth]{../../results/plots/task_hardness_landscape.png}
+    \caption{Task hardness landscape using INT-CHEM and EXT-CHEM descriptors, showing two distinct groups of tasks.}
+    \label{fig:task_hardness_landscape}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{../../results/plots/roc_auc_all_models.png}
+\includegraphics[width=\columnwidth]{../../results/plots/pr_auc_all_models.png}
+\caption{Hybrid model comparison across all Tox21 tasks using (a) ROC-AUC and (b) PR-AUC.}
+\label{fig:hybrid_comparison_roc_pr} 
+\end{figure}
+
+\input{avg_scores_tab.tex}
+% \input{improvement_roc_tab.tex}
+\input{improvement_pr_tab.tex}
+
+% We begin by depicting representative CT scans, and corresponding lung segmentation and inflammation segmentation by UNet++ and SegCaps in Figs. \ref{Fig : Main Results}(a), \ref{Fig : Main Results}(b), \ref{Fig : Main Results}(c) and \ref{Fig : Main Results}(d), respectively. The results of inflammation segmentation present perceptible differences. Experts felt that UNet++ and SegCaps were slightly superior in segmenting consolidation and GGOs, respectively. However, statistically, their performances in terms of DC were nearly indistinguishable, as seen in Table \ref{tab:2d-IS}. However, this may not indicate truly similar performance, because the chosen baseline, as alluded earlier, may not provide a reliable reference.
+
+
+
+%The segmentation performance is evaluated using multiple metrics. First, the Dice coefficient is calculated for the test subset of covid-challenge-dataset. Second, ALLRs generated for the MGMCH dataset using the segmentation models is compared with the CT severity scores. Finally,  outcome prediction models for need for ventilation in this set of patients, each using lung inflammation quantification by the three methods in question are compared. 
+
+
+
+
+%Dice coefficients (DCs) for both UNet++ and SegCaps models were nearly equal. The values of DCs were relatively low, and we investigated this further. We found that there was overestimation of the inflamed area in the Covid segmentation challenge dataset when we performed in-house annotation of lung segments (by a practicing senior radiologist) as shown in Fig. \ref{Fig : Radiologist comparison}. Therefore, during our we modified the annotations and took only the region which have high density of inflammation in the mask, it cause somewhat underestimation in the generated mask and that intuition was also confirmed by the radiologists and is shown .
+
+%Some examples of results obtained after UNet++ segmentation and SegCaps segmentation on MGMCH data are given in Fig \ref{Fig : Main Results}.
+
+% Towards more reliable comparison, scatter plot of ALLRs based on UNet++ (as well as SegCaps) versus CT severity scores is presented in Fig. \ref{fig:RelationshipGraph}. We obtained the quadratic regression curve in each case, and the respective root mean squared errors of 0.118 and 0.121 for UNet++ and SegCaps models. For linear regression, which provided a worse fit, respective correlation coefficients were 0.70 and 0.68. By these measures too, UNet++ and SegCaps performed almost similarly.
+
+% However, as shown in Fig. \ref{fig:ROC_CUrve}, the median ROC curves for predicting the need for MV using ALLRs based on UNet++ and SegCaps were found to be significantly different. Specifically, UNet++ performs superior in the low-FPR regime, and SegCaps in the high-FPR regime. This phenomenon possibly corroborates the aforementioned subjective opinion regarding their performance difference in case of consolidation and GGOs. In any case, by choosing the better tool in each regime, one may operate at a performance level (in terms of AUC) higher than either can achieve.   
+
+
+
+% The AUC stands for "Area under the ROC Curve" shown in fig \ref{fig:ROC_CUrve} has median of 0.912 and standard deviation of 0.059 for UNet++ model and median of 0.904 and standard deviation of 0.054 in case of SegCaps. The dashed line in the curve shown in fig \ref{fig:ROC_CUrve} represents the convex hull whose combined auc median is 0.921.
+
+% \section{Discussion}
+
+% Here, we treated various types of lung parenchymal changes as the same class.
+% Class-wise differentiation (possibly statistically) and inflammation quantification may produce a more accurate score for the overall degree of lung inflammation, reflecting lung pathophysiology better. This work potentially opens up an area of discussion for choosing the most appropriate tool for quantification of various lung pathologies, which can be put to precise clinical use if they can be made context specific. For example, if a radiologist sees a GGO specific disease in a particular CT scan, s/he may choose to use a tool that is more appropriate for GGO while quantifying the total area involved in the disease, and use a different tool for consolidation-predominant disease. 
+
+\section{Conclusion}
+
+In this study, a comprehensive study of molecular toxicity prediction was conducted using the Tox21 dataset, benchmarking a wide spectrum of classical machine learning models, graph neural networks, and hybrid architectures. The first objective was to establish a rigorous baseline. Classical models such as Random Forests, SVMs, and XGBoost, were evaluated and the results showed that careful optimization through SMOTE balancing and Optuna hyperparameter tuning significantly improves their performance. However, these models remained limited by their reliance on fixed molecular fingerprints.
+Graph-based deep learning models, specifically GraphConv and GAT, offered more expressive structural modeling but still exhibited inconsistent task-wise performance. To understand the source of this variability, the analysis incorporated INT-CHEM and EXT-CHEM descriptors to quantify task hardness and inter-task relatedness. This characterization revealed two distinct groups of Tox21 tasks: those that benefit from single-task learning and those that benefit from knowledge sharing. These findings provided insight into why neither classical ML nor GNNs consistently achieved superior performance across all endpoints.
+Motivated by these insights, the study introduced a hybrid modeling strategy that combines learned GNN embeddings with handcrafted ECFP fingerprints, using a Random Forest classifier as the final predictor. This hybrid approach successfully integrates complementary molecular views: GNN embeddings capture structural and relational information, while ECFP fingerprints provide precise substructural cues. Empirically, the hybrid model outperformed both optimized classical models and standalone GNNs across most toxicity tasks, especially on those with high intrinsic hardness.
+Overall, our study demonstrates that no single representation or modeling paradigm is universally optimal for Tox21. Instead, the most effective strategy is one that integrates multiple molecular views informed by task hardness analysis. The work highlights the value of task-aware model design and provides a generalizable framework for combining classical cheminformatics features with deep learned representations. 
+% Future work may extend this hybrid architecture with transformer-based chemical encoders, meta-learning for task adaptation, or multi-task MoE frameworks for improved knowledge sharing.
+% \section{Future Work} 
+Future work may include quantifying feature attribution (SHAP, gradients) to disentangle ECFP vs.\ GNN contributions and task-wise gains (with INT/EXT-CHEM comparisons), extend models via mixture-of-experts routing informed by hardness descriptors and transfer/meta-learning for few-shot adaptation, and integrate domain constraints by adding toxicophore alerts and PAINS filters as features/penalties, reporting rule-model concordance to ensure mechanistic plausibility and reduce spurious correlations.

@@ -1,0 +1,23 @@
+\begin{table}[t!]
+    \centering
+\caption{Percentage PR-AUC improvement over RF baseline for all models across Tox21 tasks.}
+\label{tab:pr_auc_improvements}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}} lrrr}
+\toprule
+    \textbf{Task} & \textbf{RF(Opt.)} & \textbf{XGB(Opt.)} & \textbf{Hybrid\_GNN\_RF} \\
+    \midrule
+    NR-AR & 11.13 & 9.29 & \textbf{60.64} \\
+    NR-AR-LBD & 9.70 & 9.26 & \textbf{95.42} \\
+    NR-AhR & -6.82 & -14.71 & \textbf{57.14} \\
+    NR-Aromatase & 17.84 & -11.78 & \textbf{100.17} \\
+    NR-ER & 21.60 & 15.40 & \textbf{134.70} \\
+    NR-ER-LBD & -8.29 & -10.99 & \textbf{161.05} \\
+    NR-PPAR-gamma & 8.08 & -23.66 & \textbf{282.91} \\
+    SR-ARE & 5.13 & 3.19 & \textbf{114.60} \\
+    SR-ATAD5 & 15.77 & -15.10 & \textbf{285.09} \\
+    SR-HSE & 22.63 & 25.59 & \textbf{38.85} \\
+    SR-MMP & -14.36 & -12.32 & \textbf{88.97} \\
+    SR-p53 & 21.55 & 32.91 & \textbf{38.08} \\
+\bottomrule
+\end{tabular*}
+\end{table}

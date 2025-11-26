@@ -1,0 +1,116 @@
+% \section{{Introduction}}
+Molecular toxicity prediction is a key component of modern drug discovery, enabling early identification of harmful compounds before expensive laboratory testing. Large screening campaigns such as Tox21 provide rich data across multiple toxicity pathways but exhibit challenges including severe class imbalance, heterogeneous assay noise, and variable task difficulty. These factors complicate the development of robust machine learning models~\cite{tox21_overview}.
+Classical machine learning (ML) methods such as Random Forests, Support Vector Machines, and Gradient Boosting typically rely on engineered molecular fingerprints like ECFP. While effective in many settings, these models struggle when the underlying structure-toxicity relationships are highly nonlinear. Graph Neural Networks (GNNs), such as Graph Convolutional Networks (GraphConv)~\cite{kipf2017gcn,duvenaud2015convnets} and more advanced architectures, offer an alternative by learning representations directly from molecular graphs, often providing more expressive structural insight~\cite{gilmer2017mpnn}.
+However, neither ML models nor GNNs perform uniformly well across all Tox21 tasks. To understand these inconsistencies, the work quantifies task difficulty using two descriptors: INT-CHEM, reflecting intrinsic task hardness, and EXT-CHEM, measuring task relatedness via Optimal Transport Dataset Distance (OTDD)~\cite{2025sotdd}. This analysis reveals two distinct groups of toxicity tasks: those favoring single-task ML models and those benefiting from knowledge sharing in GNNs.
+Motivated by these findings, the work develops a hybrid framework that joins GNN-derived embeddings with ECFP fingerprints and trains a Random Forest on the combined representation. This simple hybrid approach consistently outperforms standalone ML and GNN models, demonstrating that handcrafted and learned features capture complementary chemical information. The outcome is a unified, task-aware modeling strategy that leverages insights from task-hardness analysis to guide representation learning and predictive modeling.
+
+% \begin{figure}[!t]
+%     \centering
+%   \begin{subfigure}{0.22\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{images/Ground Glass_1.jpg} 
+%     \\
+%     (a) 
+%     \end{subfigure}
+%     %\caption{Bad Quality}caption{Good Quality.}
+%     \begin{subfigure}{0.22\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{images/Consolidation MGH.jpg}
+%     \\
+%     (b)
+%      \end{subfigure}
+% \caption{Lung inflammation as observed on chest CT scan: (a) Ground glass opacity (GGO); and (b) Consolidation \cite{Radiology_Findings}.}
+% \label{fig:quality}
+% \end{figure}
+
+
+% In order to achieve accurate quantification of lung parenchymal changes, one has to be able to identify primary types of disease patterns within the lung fields. Once identification has been achieved, inflamed lung area measurement can be reliably performed. Amongst the lung parenchymal changes associated with COVID-19 or other viral pneumonia, commonest are ground glass opacity (GGO) and consolidation (see Fig. \ref{fig:quality}), with Chest CTs showing at least one in nearly 85\% patients with COVID-19 \cite{parekh2020review}. In chest CTs, GGOs are defined as hazy lung areas of slightly increased attenuation, usually attributed to partial airspaces filling, and do not obscure the bronchial and vascular margins. Consolidation is defined as increase in the pulmonary parenchymal attenuation with obscuration of the vascular and airway wall margins due to pathological replacement of alveolar air by fluids, cells, or tissues. It can be  multifocal, patchy, or segmental with subpleural location or along bronchovascular bundles. Consolidation can either occur as a progress of the disease or co-exist with GGOs.
+
+
+
+% \begin{figure*}[!t]
+%     \centering
+%     \begin{tabular}{cc}
+%         \includegraphics[width=0.38\linewidth]{images/UNet++_1.jpg} 
+%         & 
+%         \includegraphics[width=0.60\linewidth]{images/SegCaps3.jpg}
+%         \\
+%         (a) & (b)
+%     \end{tabular}
+%     % \end{subfigure}
+% \caption{ML models: (a) UNet++ \cite{UNET++}; and (b) SegCaps \cite{segcaps}.}
+% \label{fig:models}
+% \end{figure*}
+
+
+% \begin{figure*}
+% \centering
+% \begin{tabular}{ccc}
+% \!\!\!\!
+%     \includegraphics[width=0.24\linewidth]{images/challenge.png} & \!\!\!\! \!\!\!\!
+%     \includegraphics[width=0.24\linewidth]{images/radio.JPG}
+%     & \!\!\!\! \!\!\!\!
+%     \includegraphics[width=0.24\linewidth]{images/dense.png}
+%     %& \!\!\!\! \!\!\!\!
+%     %\includegraphics[width=0.24\linewidth]{images/radio.JPG}
+%     \\
+%     (a) & (b) & (c) %& (d)
+% \end{tabular}
+% \caption{Inflammation in Axial CT: {(a)} Original annotation \cite{roth2021rapid}; {(b)} Segmented by expert team member; {(c)} 
+% Mask for dense regions upon proposed preprocessing.
+% %; (d) Segmentation by SegCaps.
+% }
+% \label{Fig : Radiologist comparison}
+% \end{figure*}
+
+
+
+% --------------------------------------------
+% PROFESSIONAL METHODOLOGY DIAGRAM (TOP-RIGHT)
+% --------------------------------------------
+\begin{figure}[t]
+\centering  % <-- moves the entire figure to the top-right corner
+\vspace*{1em}
+\scalebox{0.65}{  % <-- decrease size (adjust number as needed)
+\begin{tikzpicture}[
+    node distance=1.2cm,
+    every node/.style={font=\small},
+    process/.style={rectangle, rounded corners=4pt, minimum width=3.5cm,minimum height=0.9cm,draw=black!70, fill=blue!6, thick},
+    fusion/.style={rectangle, rounded corners=4pt, minimum width=4.2cm, minimum height=1.0cm, draw=black!80,fill=green!8, thick},
+    model/.style={rectangle, rounded corners=4pt,minimum width=3.8cm,minimum height=0.9cm, draw=black!80, fill=yellow!15, thick},
+    arrow/.style={-{Latex[length=3mm,width=2mm]}, thick}
+]
+
+% Nodes
+\node (data) [process] {\textbf{Tox21 Dataset}};
+\node (ecfp) [process, below=1.1cm of data, xshift=-2.0cm, fill=cyan!10] {\textbf{ECFP} Fingerprints};
+\node (gnn) [process, below=1.1cm of data, xshift=2.0cm, fill=orange!12] {\textbf{GNN} Embeddings};
+\node (concat) [fusion, below=3.0cm of data, align=center] {\textbf{Hybrid Feature Fusion} \\ (Concatenate ECFP + GNN)};
+\node (rf) [model, below=of concat] {Random Forest Classifier};
+\node (pred) [process, below=of rf] {Toxicity Prediction};
+
+% Arrows
+\draw[arrow] (data) -- (ecfp);
+\draw[arrow] (data) -- (gnn);
+\draw[arrow] (ecfp) -- (concat);
+\draw[arrow] (gnn) -- (concat);
+\draw[arrow] (concat) -- (rf);
+\draw[arrow] (rf) -- (pred);
+
+\end{tikzpicture}
+}
+\caption{Overview of the hybrid modeling pipeline combining GNN embeddings and ECFP fingerprints.}
+\end{figure}
+
+
+
+
+
+
+
+
+\begin{comment}
+In this section, we present a detailed study of existing works on the topic of Identification of Ground Glass Region in chest CTs. \hl{Here the existing predominant use of UNet and how SegCaps can be better (at least in theory) should be highlighted}
+The authors utilized the existing Deep learning methods such as UNet and Segnet for COVID-19 lung CT image segmentation task \cite{Saood-2021} which helps to automate, prioritize, fasten, and broaden the treatment of COVID-19 patients globally. A novel Deep Neural Network(Inf-Net)\cite{Fan-2020} was introduced to address the challenge of COVID-19 Lung Infection Segmentation problem. Inf-Net is used to automatically identify infected regions from chest CT scans. The authors conducted extensive experiments on a COVID-19 infection dataset and demonstrated that the proposed Inf-Net outperforms most cutting-edge segmentation models and advances the state-of-the-art. In \cite{Dai-2020}, the authors explained the difference between COVID-19 and other lung diseases using lung computed tomography images of some patients. The authors developed a deep learning (DL)-based segmentation system\cite{Shan+} to automatically quantify infection regions of interest (ROIs) and their volumetric ratios w.r.t. the lung and its performance is evaluated by comparing the automatically segmented infection regions with the manually-delineated ones on 302 chest CT scans of 302 COVID-19 patients. 
+In \cite{Covid-19-Classification}, the authors leveraged the use of Resnet-101 architecture for the classification of COVID-19 CT images and normal CT images. In this research work, the heatmap and confidence score of the detection are also demonstrated, such that users or human experts can use them for a final diagnosis in practical usages.
+\end{comment}

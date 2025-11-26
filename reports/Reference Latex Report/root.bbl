@@ -1,0 +1,54 @@
+\begin{thebibliography}{10}
+
+\bibitem{tox21_overview}
+R.~Huang, M.~Xia, D.-T. Nguyen, T.~Zhao, S.~Sakamuru, J.~Zhao, S.~Shahane,
+  A.~Rossoshek, and A.~Simeonov, ``Tox21challenge to build predictive models of
+  nuclear receptor and stress response pathways as mediated by exposure to
+  environmental chemicals and drugs,'' {\em Frontiers in Environmental
+  Science}, vol.~3, 01 2016.
+
+\bibitem{kipf2017gcn}
+T.~Siameh, ``Semi-supervised classification with graph convolutional
+  networks,'' 12 2023.
+
+\bibitem{duvenaud2015convnets}
+D.~Duvenaud, D.~Maclaurin, J.~Aguilera-Iparraguirre, R.~Gómez-Bombarelli,
+  T.~Hirzel, A.~Aspuru-Guzik, and R.~Adams, ``Convolutional networks on graphs
+  for learning molecular fingerprints,'' {\em Advances in Neural Information
+  Processing Systems (NIPS)}, vol.~13, 09 2015.
+
+\bibitem{gilmer2017mpnn}
+J.~Gilmer, S.~S. Schoenholz, P.~F. Riley, O.~Vinyals, and G.~E. Dahl, ``Neural
+  message passing for quantum chemistry,'' in {\em Proceedings of the 34th
+  International Conference on Machine Learning - Volume 70}, ICML'17,
+  pp.~1263--1272, JMLR.org, 2017.
+
+\bibitem{2025sotdd}
+K.~Nguyen, H.~Nguyen, T.~Pham, and N.~Ho, ``Lightspeed geometric dataset
+  distance via sliced optimal transport,'' 05 2025.
+
+\bibitem{rogers2010ecfp}
+D.~Rogers and M.~Hahn, ``Extended-connectivity fingerprints,'' {\em Journal of
+  Chemical Information and Modeling}, vol.~50, no.~5, pp.~742--754, 2010.
+
+\bibitem{wu2018moleculenet}
+Z.~Wu, B.~Ramsundar, E.~Feinberg, J.~Gomes, {\em et~al.}, ``Moleculenet: A
+  benchmark for molecular machine learning,'' {\em Chemical Science}, vol.~9,
+  no.~2, pp.~513--530, 2018.
+
+\bibitem{Velickovic2017GraphAN}
+P.~Veličković, G.~Cucurull, A.~Casanova, A.~Romero, P.~Liò, and Y.~Bengio,
+  ``Graph attention networks,'' {\em arXiv preprint arXiv:1710.10903}, 2017.
+
+\bibitem{doi:10.1021/acs.jcim.5c01844}
+M.~L. Parker, S.~Mahmoud, B.~Montefiore, M.~Ören, H.~Tandon, C.~Wharrick, and
+  M.~D. Segall, ``Improving predictions of molecular properties with graph
+  featurization and heterogeneous ensemble models,'' {\em Journal of Chemical
+  Information and Modeling}, vol.~65, no.~21, pp.~11644--11655, 2025.
+
+\bibitem{doi:10.1021/acs.jcim.4c00160}
+H.~Fooladi, S.~Hirte, and J.~Kirchmair, ``Quantifying the hardness of
+  bioactivity prediction tasks for transfer learning,'' {\em Journal of
+  Chemical Information and Modeling}, vol.~64, no.~10, pp.~4031--4046, 2024.
+
+\end{thebibliography}

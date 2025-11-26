@@ -1,0 +1,52 @@
+Based on the performance table:
+| Task          | Best GNN Model | ROC-AUC | PR-AUC | Interpretation Focus                                                           |
+| ------------- | -------------- | ------- | ------ | ------------------------------------------------------------------------------ |
+| **NR-AR**     | GraphConv      | 0.746   | 0.458  | Both global fingerprint patterns and local bonding topology matter.            |
+| **NR-AhR**    | GraphConv      | 0.780   | –      | Complex, non-linear activity influenced by molecular topology.                 |
+| **NR-ER-LBD** | GAT            | 0.700   | 0.155  | Task benefits from attention — local functional-group specificity.             |
+| **NR-PPAR-γ** | GAT            | 0.703   | 0.097  | Weak, spatially heterogeneous signal → attention helps.                        |
+| **SR-ATAD5**  | GraphConv      | 0.748   | 0.177  | Topological features (DNA damage indicators) captured well by message passing. |
+| **SR-HSE**    | GAT            | 0.750   | –      | Noisy but locally structured activity → attention mitigates noise.             |
+| **SR-MMP**    | GAT            | 0.759   | –      | Local binding motifs crucial — GAT exploits neighborhood weighting.            |
+| **NR-AR-LBD** | GraphConv      | –       | 0.330  | Clear signal in PR-AUC; GNN captures enrichment among actives.                 |
+| **NR-ER-LBD** | GraphConv      | –       | 0.155  | Similar to GAT version — benefits from structural aggregation.                 |
+| **NR-PPAR-γ** | GraphConv      | –       | 0.097  | Minor advantage; GNN handles subtle, sparse positives.                         |
+
+Interpretation of Results
+GraphConv dominates NR-type (nuclear receptor) tasks and some SR-type (stress response) tasks where molecular topology plays a central role.
+GAT dominates tasks where local substructure importance varies - i.e., tasks requiring differentiation among atom neighborhoods (e.g., SR-MMP, SR-HSE).
+
+Task level insights
+| Task                  | Likely Explanation of GNN Superiority                                                                                                                                             |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **NR-AR & NR-AR-LBD** | These assays depend on steroid-like ring scaffolds with subtle side-chain variations; graph convolution preserves adjacency and ring connectivity lost in bit-based fingerprints. |
+| **NR-AhR**            | Diverse aromatic compounds activate AhR; GraphConv integrates multi-ring connectivity and planarity patterns more effectively than ECFP.                                          |
+| **NR-ER-LBD**         | Ligand binding involves specific spatial orientation of H-bond donors; GAT’s attention mechanism captures differential node importance.                                           |
+| **NR-PPAR-γ**         | Distributed binding interactions across the molecule; attention mechanism helps weigh multiple functional groups.                                                                 |
+| **SR-ATAD5 & SR-HSE** | Small, noisy datasets—GNNs’ local aggregation smooths variance; attention stabilizes focus on informative regions.                                                                |
+| **SR-MMP**            | MMP inhibition depends on metal-binding substructures (carbonyls, hydroxamates); attention enables identification of those chemically crucial nodes.                              |
+
+Overall Pattern
+GNNs outperform ML models on tasks where 3D / bond-level context drives activity, or where local structural interactions dominate.
+Fingerprint-based models (RF, SVM, XGB) are limited by their fixed bit representations, which ignore adjacency relationships.
+Attention-based GNNs (GAT) outperform GraphConv where node-level relevance varies—typical in metal-binding or pocket-specific interactions (SR-MMP, SR-HSE).
+GraphConv performs better on globally consistent topology tasks (NR-AR, NR-AhR) where uniform aggregation suffices.
+
+Architectural Details of GNN Models (These configurations were used for all Tox21 tasks to ensure fairness in comparison.)
+GraphConv Model
+The Graph Convolutional Network (GraphConv) was implemented using DeepChem’s GraphConvModel, where molecules were represented as graphs with atoms as nodes 
+and bonds as edges. The model consisted of two graph convolutional layers with hidden dimensions of 64 and 128 units, followed by a dense layer of 128 units with ReLU activation. 
+A global mean pooling layer aggregated node embeddings into a fixed-length molecular representation, which was then passed to a sigmoid output layer for multi-task 
+classification over the 12 Tox21 targets. The model was trained using the Adam optimizer with a learning rate of 0.001, a batch size of 64, dropout of 0.2, and for 30 epochs.
+
+GAT Model
+The Graph Attention Network (GAT) was built using DeepChem’s GATModel, employing two attention-based graph layers with 64 hidden units and four attention heads per layer to capture 
+differential importance among atomic neighbors. The attention-weighted node embeddings were globally pooled to form a molecular-level representation, followed by a dense sigmoid output 
+for multi-task classification across the 12 Tox21 assays. The model used the MolGraphConvFeaturizer with edge features to incorporate both atomic and bond-level information. 
+Training was performed with the Adam optimizer using a learning rate of 0.001, batch size of 64, dropout of 0.2, and 50 epochs.
+
+Interpretive Summary
+GraphConv excelled in tasks (NR-AR, NR-AhR, NR-AR-LBD) requiring stable spatial pattern recognition, showing its strength in capturing uniform topological signatures.
+GAT excelled in tasks (SR-MMP, SR-HSE, NR-PPAR-γ) where local substructures contribute differentially to activity — attention mechanisms highlight these key nodes.
+The results demonstrate that GNNs outperform classical ML models when the bioactivity depends on chemical context rather than mere presence of substructures.
+Traditional ML models remain competitive on tasks with linearly separable or well-encoded fingerprint features (e.g., NR-ER, NR-Aromatase).
