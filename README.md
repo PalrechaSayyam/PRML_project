@@ -45,6 +45,7 @@ A new hybrid model combining:
 A Random Forest classifier is trained on the concatenated features:
 
 X_hybrid = [GNN_embeddings || ECFP_fingerprint]
+
 This design leverages both learned graph structure and handcrafted chemical motifs.
 
 ---
